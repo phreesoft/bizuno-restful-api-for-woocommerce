@@ -21,7 +21,7 @@
  * @author     Dave Premo, Bizuno Project <support@bizuno.com>
  * @copyright  2008-2026, PhreeSoft, Inc.
  * @license    https://www.gnu.org/licenses/agpl-3.0.txt
- * @version    7.x Last Update: 2026-05-30
+ * @version    7.x Last Update: 2026-09-19 (volume pricing table shows the Bizuno sell unit label when the tiers carry one)
  * @filesource /lib/product.php
  */
 
@@ -106,6 +106,8 @@ class api_product extends api_common
     // Ensure tiers are sorted by quantity ascending (just in case)
     usort($tiers, function($a, $b) { return (int)$a['qty'] <=> (int)$b['qty']; });
     $pack_size = (int)$tiers[0]['qty'];
+    $has_units = false; // Bizuno 7.4.7+ sends the sell unit name (e.g. "Blister Card (5 pieces)") with each tier
+    foreach ($tiers as $tier) { if (!empty($tier['label'])) { $has_units = true; break; } }
 
     // Start output
     if ($pack_size > 1) {
@@ -118,6 +120,7 @@ class api_product extends api_common
         <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
             <thead>
                 <tr style="background: #eee;">
+                    <?php if ($has_units): ?><th style="text-align: left; padding: 10px; border-bottom: 2px solid #ddd;">Sell Unit</th><?php endif; ?>
                     <th style="text-align: left; padding: 10px; border-bottom: 2px solid #ddd;">Quantity</th>
                     <th style="text-align: right; padding: 10px; border-bottom: 2px solid #ddd;">Price Each</th>
                 </tr>
@@ -129,6 +132,7 @@ class api_product extends api_common
                     $price = (float)$tier['price'];
                     ?>
                     <tr style="border-bottom: 1px solid #eee;">
+                        <?php if ($has_units): ?><td style="padding: 10px;"><?php echo esc_html(!empty($tier['label']) ? $tier['label'] : ''); ?></td><?php endif; ?>
                         <td style="padding: 10px;"><?php echo esc_html($qty . '+'); ?></td>
                         <td style="padding: 10px; text-align: right; font-weight: bold; color: #d63384;">
                             <?php echo wp_kses_post( wc_price( $price ) ); ?>
