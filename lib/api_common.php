@@ -62,7 +62,7 @@ class api_common
     }
     public function rest_close($output=[], $status=200)
     {
-        $output['message'] = \bizuno_api_msg_get( 'error' );
+        $output['message'] = \bizuno_api_msg_all(); // all levels, Bizuno merges them into its message stack (sync/confirm results are success/info)
         return new \WP_REST_Response($output, $status);
     }
 

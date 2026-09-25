@@ -4,7 +4,7 @@ Tags: woocommerce, erp, accounting, rest-api, inventory
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 7.4.2
+Stable tag: 7.4.3
 License: AGPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/agpl-3.0.html
 
@@ -60,6 +60,12 @@ Generate it in your Bizuno instance under the API settings, then paste it into S
 5. Bizuno Shipping method available in a WooCommerce shipping zone.
 
 == Changelog ==
+
+= 7.4.3 =
+* Fixed: REST authentication rejected a plain WordPress user name (only an email address worked), which blocked product upload, refresh, sync and shipment confirmation from Bizuno.
+* The product refresh endpoint now returns the number of products updated.
+* Fixed: REST responses only returned error messages, so Synchronize Products and Confirm Shipments showed nothing in Bizuno; success and info results are now returned too.
+* Product page Volume Pricing table shows the Bizuno sell unit name when the price tiers carry one.
 
 = 7.4.2 =
 * Renamed to "Bizuno RESTful API for WooCommerce" for the WordPress.org Plugin Directory; text domain updated to match the slug.

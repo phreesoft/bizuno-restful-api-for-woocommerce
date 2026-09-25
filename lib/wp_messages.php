@@ -63,6 +63,24 @@ if ( ! function_exists( 'bizuno_api_msg_get' ) ) {
     }
 }
 
+if ( ! function_exists( 'bizuno_api_msg_all' ) ) {
+    /**
+     * Return every queued message in the Bizuno msgStack shape {error|warning|info|success}=>[['text'=>..]]
+     * so REST callers see the success/info results too, not just errors. Empty array when nothing is queued.
+     */
+    function bizuno_api_msg_all() {
+        $out = [];
+        foreach ( ( $GLOBALS['bizuno_api_messages'] ?? [] ) as $level => $items ) {
+            foreach ( (array) $items as $text ) {
+                $row = [ 'text' => $text ];
+                if ( 'info' === $level ) { $row['title'] = 'Information'; }
+                $out[ $level ][] = $row;
+            }
+        }
+        return $out;
+    }
+}
+
 if ( ! function_exists( 'bizuno_api_render_notices' ) ) {
     /** Render queued messages as WordPress admin notices. */
     function bizuno_api_render_notices() {

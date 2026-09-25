@@ -3,7 +3,7 @@
  * Plugin Name:       Bizuno RESTful API for WooCommerce
  * Plugin URI:        https://github.com/phreesoft/bizuno-restful-api-for-woocommerce
  * Description:       Secure RESTful API bridge for real-time WooCommerce ↔ Bizuno ERP sync: orders, inventory, customers, prices & more.
- * Version:           7.4.2
+ * Version:           7.4.3
  * Requires at least: 6.5
  * Tested up to:      7.0
  * Requires PHP:      8.1
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-if ( ! defined( 'BIZUNO_API_VERSION' ) ) { define( 'BIZUNO_API_VERSION', '7.4.2' ); }
+if ( ! defined( 'BIZUNO_API_VERSION' ) ) { define( 'BIZUNO_API_VERSION', '7.4.3' ); }
 
 // Library files for plugin operations
 require_once ( dirname(__FILE__) . '/lib/wp_messages.php' ); // native WordPress messaging (no Bizuno library dependency)
@@ -157,7 +157,8 @@ class bizuno_api
     
     public function check_access( WP_REST_Request $request ) {
 
-        $email = sanitize_email( $request->get_header( 'email' ) );
+        // wp_authenticate() takes a user name or an email, sanitize_email() blanked a plain user name ("Missing credentials.")
+        $email = sanitize_text_field( wp_unslash( (string) $request->get_header( 'email' ) ) );
         $pass  = $request->get_header( 'pass' );
         
         if ( empty( $email ) || empty( $pass ) ) {

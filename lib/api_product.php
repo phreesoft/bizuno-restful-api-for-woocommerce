@@ -79,7 +79,7 @@ class api_product extends api_common
     {
         $data   = $this->rest_open($request);
         $success= $this->productRefresh($data['data']);
-        $output = ['result'=>!empty($success['result'])?'Success':'Fail', 'note'=>!empty($success['note'])?$success['note']:''];
+        $output = ['result'=>!empty($success['result'])?'Success':'Fail', 'acted'=>!empty($success['acted'])?(int)$success['acted']:0, 'note'=>!empty($success['note'])?$success['note']:''];
         return $this->rest_close($output);
     }
     public function product_sync($request)
